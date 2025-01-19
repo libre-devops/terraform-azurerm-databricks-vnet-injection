@@ -12,11 +12,11 @@ module "subnet_calculator" {
 
   base_cidr = var.vnet_address_space[0]
   subnets = {
-    var.databricks_public_subnet_name = {
+    (var.databricks_public_subnet_name) = {
       mask_size = 27
       netnum    = 0
     },
-    var.databricks_private_subnet_name = {
+    (var.databricks_private_subnet_name) = {
       mask_size = 27
       netnum    = 1
     }
@@ -32,7 +32,7 @@ module "network" {
 
   vnet_name          = var.vnet_name
   vnet_location      = module.rg.rg_location
-  vnet_address_space = var.vnet_name
+  vnet_address_space = var.vnet_address_space
 
   subnets = { for i, name in module.subnet_calculator.subnet_names :
     name => {
@@ -87,15 +87,16 @@ module "databricks_workspace" {
       tags     = module.rg.rg_tags
 
       name = var.databricks_workspace_name
+      sku  = var.databricks_workspace_sku
 
       custom_parameters = {
         no_public_ip                                         = true
         public_subnet_name                                   = var.databricks_public_subnet_name
         public_subnet_network_security_group_association_id  = module.public_nsg.nsg_subnet_association_ids[0]
         private_subnet_name                                  = var.databricks_private_subnet_name
-        private_subnet_network_security_group_association_id = module.private_nsg.nsg_network_interface_security_group_association_ids[0]
+        private_subnet_network_security_group_association_id = module.private_nsg.nsg_subnet_association_ids[0]
         virtual_network_id                                   = module.network.vnet_id
-        vnet_address_prefix                                  = module.network.vnet_address_space[0]
+        vnet_address_prefix                                  = var.vnet_address_space[0]
       }
     }
   ]
