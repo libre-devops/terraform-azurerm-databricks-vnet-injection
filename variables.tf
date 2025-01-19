@@ -15,6 +15,12 @@ variable "databricks_workspace_name" {
   description = "The name of the Databricks workspace"
 }
 
+variable "databricks_workspace_sku" {
+  description = "The SKU of the Databricks workspace"
+  type        = string
+  default     = "premium"
+}
+
 variable "location" {
   description = "The location for this resource to be put in"
   type        = string
@@ -52,10 +58,4 @@ variable "vnet_address_space" {
 variable "vnet_name" {
   description = "The name of the VNet to inject the Databricks workspace into"
   type        = string
-}
-
-variable "databricks_workspace_sku" {
-    description = "The SKU of the Databricks workspace"
-    type        = string
-    default     = "premium"
 }
