@@ -37,7 +37,7 @@ module "network" {
   subnets = { for i, name in module.subnet_calculator.subnet_names :
     name => {
       address_prefixes = toset([module.subnet_calculator.subnet_ranges[i]])
-      delegation       = [
+      delegation = [
         {
           type = "Microsoft.Databricks/workspaces"
         }
@@ -86,7 +86,7 @@ module "databricks_workspace" {
       location = module.rg.rg_location
       tags     = module.rg.rg_tags
 
-      name                                  = var.databricks_workspace_name
+      name = var.databricks_workspace_name
 
       custom_parameters = {
         no_public_ip                                         = true
