@@ -1,19 +1,10 @@
-module "rg" {
-  source = "registry.terraform.io/libre-devops/rg/azurerm"
 
-  rg_name  = "rg-${var.short}-${var.loc}-${var.env}-${random_string.entropy.result}"
-  location = local.location
-  tags     = local.tags
-
-  #  lock_level = "CanNotDelete" // Do not set this value to skip lock
-}
-
-module "dev" {
+module "databricks_vnet_injection" {
   source = "../../"
 
-  rg_name  = module.rg.rg_name
-  location = module.rg.rg_location
-  tags     = module.rg.rg_tags
-
-  name = "${var.name}-${random_string.entropy.result}"
+  rg_name                   = "rg-${var.short}-${var.loc}-${var.env}-02"
+  databricks_workspace_name = "databricks-${var.short}-${var.loc}-${var.env}-01"
+  vnet_name                 = "vnet-${var.short}-${var.loc}-${var.env}-01"
+  tags                      = local.tags
 }
+
